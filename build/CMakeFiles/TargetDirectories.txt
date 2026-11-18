@@ -1,0 +1,7 @@
+C:/Users/vivaa/Documents/Creation/Programming/FallingSand/build/CMakeFiles/FallingSand.dir
+C:/Users/vivaa/Documents/Creation/Programming/FallingSand/build/CMakeFiles/edit_cache.dir
+C:/Users/vivaa/Documents/Creation/Programming/FallingSand/build/CMakeFiles/rebuild_cache.dir
+C:/Users/vivaa/Documents/Creation/Programming/FallingSand/build/_deps/sdl3-build/CMakeFiles/SDL3-static.dir
+C:/Users/vivaa/Documents/Creation/Programming/FallingSand/build/_deps/sdl3-build/CMakeFiles/SDL_uclibc.dir
+C:/Users/vivaa/Documents/Creation/Programming/FallingSand/build/_deps/sdl3-build/CMakeFiles/edit_cache.dir
+C:/Users/vivaa/Documents/Creation/Programming/FallingSand/build/_deps/sdl3-build/CMakeFiles/rebuild_cache.dir

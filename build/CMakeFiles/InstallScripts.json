@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/vivaa/Documents/Creation/Programming/FallingSand/build/cmake_install.cmake",
+		"C:/Users/vivaa/Documents/Creation/Programming/FallingSand/build/_deps/sdl3-build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

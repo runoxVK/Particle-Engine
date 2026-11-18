@@ -1,6 +1,8 @@
 #include "SDL3/SDL_events.h"
 #include "SDL3/SDL_init.h"
 #include "SDL3/SDL_keyboard.h"
+#include "SDL3/SDL_log.h"
+#include "SDL3/SDL_mouse.h"
 #include "SDL3/SDL_video.h"
 #include <SDL3/SDL.h>
 //https://wiki.libsdl.org/SDL3/FrontPage
@@ -28,6 +30,7 @@ int main(){
     SDL_Event event;
     const bool* keystate = SDL_GetKeyboardState(nullptr);
 
+    // SDL_WarpMouseInWindow(SDL_Window *window, float x, float y) --> forces Mouse position into a certain place
     bool isRunning = true;
 
     while(isRunning){
@@ -35,6 +38,8 @@ int main(){
         //SDL_PollEvent(&event) returns 1 if any event is taking place
         // Event Handling Loop:
         while(SDL_PollEvent(&event)){
+
+            //Quit
             if(event.type == SDL_EVENT_QUIT){
                 isRunning = false;
             }
@@ -48,6 +53,17 @@ int main(){
                     SDL_Log("L Key pressed");
                 }
 
+            }
+
+            // Mouse Motion
+            else if (event.type == SDL_EVENT_MOUSE_MOTION){
+                    // There is also event.motion.xrel, event.motion.yrel
+                    SDL_Log("x,y: %f, %f",event.motion.x, event.motion.y);
+            }
+
+            // Mouse Click
+            else if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN){
+                SDL_Log("Mouse Pressed");
             }
         }
 

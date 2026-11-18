@@ -9,31 +9,40 @@
 #include <iostream>
 
 
-
-int main(){
-
-    // Initializing a system (SDL_INIT_AUDIO later too)
-    if(!SDL_Init(SDL_INIT_VIDEO)){
-        SDL_Log("Failed!");
-        return -1;
-    }
-
-    // Creating a pointer to the window and creating a window
-    SDL_Window* window = SDL_CreateWindow("Falling Sand", 320, 240, SDL_WINDOW_RESIZABLE);
-    if (!window) {
-        SDL_Log("Window failed: %s", SDL_GetError());
-        SDL_Quit();
-        return -1;
-    }
-
-    // Initializing event variable
-    SDL_Event event;
-    const bool* keystate = SDL_GetKeyboardState(nullptr);
-
-    // SDL_WarpMouseInWindow(SDL_Window *window, float x, float y) --> forces Mouse position into a certain place
+struct SDLApplication{
+    SDL_Window* window;
     bool isRunning = true;
 
-    while(isRunning){
+    // Constructor
+    SDLApplication(){
+        SDL_Init(SDL_INIT_VIDEO);
+        // Initializing a system (SDL_INIT_AUDIO later too)
+        if(!SDL_Init(SDL_INIT_VIDEO)){
+            SDL_Log("Failed!");
+        }
+
+        // Creating a pointer to the window and creating a window
+        window = SDL_CreateWindow("Falling Sand", 320, 240, SDL_WINDOW_RESIZABLE);
+        //SDL_GetWindowSize(SDL_Window *window, int *w, int *h) <-- Gets the window size if we re size it
+        if (!window) {
+            SDL_Log("Window failed: %s", SDL_GetError());
+            SDL_Quit();
+        }
+    }
+
+    // Destructor
+    ~SDLApplication(){
+        // Cleans up initialized system
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+    }
+
+    //SDL Tick
+    void SDLTick(){
+        // Initializing event variable
+        SDL_Event event;
+        const bool* keystate = SDL_GetKeyboardState(nullptr);
+        // SDL_WarpMouseInWindow(SDL_Window *window, float x, float y) --> forces Mouse position into a certain place
 
         //SDL_PollEvent(&event) returns 1 if any event is taking place
         // Event Handling Loop:
@@ -66,16 +75,25 @@ int main(){
                 SDL_Log("Mouse Pressed");
             }
         }
-
-
-
-        //Game here
     }
 
-    // Cleans up initialized system
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+
+    // Main Loop
+    void MainLoop(){
+      while(isRunning){
+          SDLTick();
+      }
+    }
 
 
+};
+
+
+
+
+int main(){
+
+    SDLApplication app;
+    app.MainLoop();
     return 0;
 }

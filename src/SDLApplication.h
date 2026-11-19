@@ -50,9 +50,14 @@ class SDLApplication{
 
             // Setting window variable (a pointer to the window) and creating a window
             window = SDL_CreateWindow("Falling Sand", 1028, 1028, SDL_WINDOW_RESIZABLE);
+            //SDL_GetWindowSize(SDL_Window *window, int *w, int *h) <-- Gets the window size if we re size it
+            if (!window) {
+                SDL_Log("Window failed: %s", SDL_GetError());
+                SDL_Quit();
+            }
 
+            // Renderer creation in window
             renderer = SDL_CreateRenderer(window, nullptr); //Nullptr refers to what will be used to render (ex. OpenGL, Vulkan) -> We set to null so SDL can decide which to use
-
             if(renderer == nullptr){
                 SDL_Log("Renderer Failed!");
             }
@@ -60,11 +65,11 @@ class SDLApplication{
                 SDL_Log("Renderer: %s", SDL_GetRendererName(renderer));
             }
 
-            //SDL_GetWindowSize(SDL_Window *window, int *w, int *h) <-- Gets the window size if we re size it
-            if (!window) {
-                SDL_Log("Window failed: %s", SDL_GetError());
-                SDL_Quit();
-            }
+            // sets a device‑independent resolution and presentation mode for a renderer, so the render target always appears at a fixed logical size regardless of actual window or display resolution
+            SDL_SetRenderLogicalPresentation(renderer, 1028, 1028, SDL_LOGICAL_PRESENTATION_LETTERBOX);
+
+
+
         }
 
         // Destructor

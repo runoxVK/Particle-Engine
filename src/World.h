@@ -27,6 +27,8 @@ class World{
                if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT) {
                    std::cout << "Coordinates out of bounds";
                }
+
+               // Gets the value at cell (x,y)
                return world[y * WIDTH + x];
            }
 
@@ -35,6 +37,8 @@ class World{
                if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT) {
                    std::cout << "Coordinates out of bounds";
                }
+
+               // Sets cell (x,y) to your value
                world[y * WIDTH + x] = value;
            }
 

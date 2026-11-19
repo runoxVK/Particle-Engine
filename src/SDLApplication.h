@@ -19,6 +19,7 @@
 #include <vector>
 
 #include "GameVars.h"
+#include "World.h"
 
 
 
@@ -32,6 +33,13 @@ class SDLApplication{
 
         SDL_Renderer* renderer; //Connection to the GPU -> Draws via the CPU -> Acts as an abstraction to OpenGL
         SDL_Texture* texture; // The texture is the image in GPU memory that gets drawn.
+
+        World world;
+
+        // Mouse Position x and y
+        int posX = 0;
+        int posY = 0;
+        bool isPressed = false;
 
         // Constructor
         SDLApplication(){
@@ -62,8 +70,8 @@ class SDLApplication{
         // Destructor
         ~SDLApplication(){
             // Cleans up initialized system
-            SDL_DestroyWindow(window);
             SDL_DestroyRenderer(renderer);
+            SDL_DestroyWindow(window);
             SDL_Quit();
         }
 
@@ -110,12 +118,24 @@ class SDLApplication{
                 // Mouse Click
                 else if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN){
                     SDL_Log("Mouse Pressed");
+                    isPressed = true;
+                    posX = int(event.motion.x);
+                    posY = int(event.motion.y);
+
                 }
+
+                else if (event.type == SDL_EVENT_MOUSE_BUTTON_UP){
+                    isPressed = false;
+                }
+
             }
         }
 
         void Update(){
+            if(isPressed){
+                world.setCell(posX, posY, 1);
 
+            }
         }
 
         void drawPixel(int x, int y){
@@ -132,6 +152,14 @@ class SDLApplication{
             SDL_SetRenderDrawColor(renderer, 0xFF, 0xFD, 0xD0, 0xFF);
             SDL_RenderClear(renderer);
 
+            for(int i=0; i<world.WIDTH; i++){
+                for(int j=0; j<world.HEIGHT; j++){
+                    if(world.getCell(i, j) == 1){
+                        drawPixel(i, j);
+
+                    }
+                }
+            }
 
             // Presents Screen
             SDL_RenderPresent(renderer);

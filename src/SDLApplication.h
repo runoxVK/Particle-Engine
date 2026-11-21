@@ -199,8 +199,7 @@ class SDLApplication{
 
             // Sets a cell to sand if pressed there
             if(isPressed){
-                // Cells are passed through the camera transform first
-                world.setCell(camera.getCellX(posX), camera.getCellY(posY), 1);
+                Sand::spawn(world, camera.getCellX(posX), camera.getCellY(posY));
 
             }
         }
@@ -231,13 +230,13 @@ class SDLApplication{
             SDL_RenderClear(renderer);
 
 
-            //Sets draw color for drawing lines etc.
-            SDL_SetRenderDrawColor(renderer, 0x5C, 0x40, 0x33, 0xFF);
-
             // Iterates through cells to draw pixels where needed
             for(int j=0; j<world.HEIGHT; j++){       // y outside
                 for(int i=0; i<world.WIDTH; i++){    // x inside
+                    // If the cell is sand, go through this rendering process
                     if(Sand::isSand(world, i, j)){
+                        SDL_Color c = Sand::color(world.getShade(i, j));
+                        SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
                         drawPixel(i, j);
                     }
                 }

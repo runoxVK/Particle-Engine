@@ -41,6 +41,10 @@ class Camera{
             int viewH = SCREEN_H / zoom;
 
             // Clamping takes a number and forces it to stay inside a range
+            /*
+             If x is outside the range a values between a and b, the returned value will be a or b as appropriate.
+             Otherwise, x is returned.
+             */
             camX = SDL_clamp(camX, 0, World::WIDTH  - viewW);
             camY = SDL_clamp(camY, 0, World::HEIGHT - viewH);
         }

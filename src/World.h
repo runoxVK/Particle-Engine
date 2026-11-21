@@ -22,7 +22,10 @@ class World{
 
         std::vector<int> world;
 
-        World(): world(WIDTH*HEIGHT, 0){} //All Cells initialized to 0
+        // Shade for color on each cell
+        std::vector<int> shade;
+
+        World(): world(WIDTH*HEIGHT, 0), shade(WIDTH*HEIGHT, 0) {} //All Cells initialized to 0
 
         // Access cell
         int getCell(int x, int y) const {
@@ -34,12 +37,11 @@ class World{
 
                // Gets the value at cell (x,y)
                return world[y * WIDTH + x];
-           }
+        }
 
         // Get Cell Direction above/Below
         int getCellYDir(int x, int y, int dir) const {
             int realDir = -dir;
-
             if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT || y+realDir < 0|| y+realDir >= HEIGHT) {
                 // Returns 2, saying this cell is a barrier
                 return 2;
@@ -51,7 +53,6 @@ class World{
 
             return 0;
         }
-
 
         // Modify cell safely
         void setCell(int x, int y, int value) {
@@ -65,6 +66,35 @@ class World{
            }
 
 
+        int getShade(int x, int y) const {
+               if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT) {
+                   return 0;
+               }
+
+               // Gets the shade at cell (x,y)
+               return shade[y * WIDTH + x];
+           }
+
+
+        void setShade(int x, int y, int value) {
+            if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT) {
+                std::cout << "Coordinates out of bounds";
+                return;
+            }
+
+            // Sets cell (x,y) to your value
+            shade[y * WIDTH + x] = value;
+
+        }
+
+
+        // Moves a grain AND its shade to a new spot
+        void moveCell(int fromX, int fromY, int toX, int toY) {
+            setCell(toX, toY, getCell(fromX, fromY));
+            setShade(toX, toY, getShade(fromX, fromY));
+            setCell(fromX, fromY, 0);
+        }
 };
+
 
 #endif

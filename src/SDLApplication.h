@@ -20,6 +20,7 @@
 #include <vector>
 
 #include "GameVars.h"
+#include "Water.h"
 #include "World.h"
 #include "Camera.h"
 #include "Sand.h"
@@ -46,6 +47,8 @@ class SDLApplication{
         int posX = 0;
         int posY = 0;
         bool isPressed = false;
+
+        bool waterDrawMode = false;
 
         // Constructor --> world = gameWorld via initializer
         // Initializer grabs our world reference and births a world such that it equals that address
@@ -126,7 +129,14 @@ class SDLApplication{
 
                     // Checks if L is pressed
                     if(keys[SDL_SCANCODE_L] == true){
-                        SDL_Log("L Key pressed");
+                        SDL_Log("WaterMode");
+                        waterDrawMode = true;
+                    }
+
+                    // Checks if L is pressed
+                    if(keys[SDL_SCANCODE_K] == true){
+                        SDL_Log("Sand Mode");
+                        waterDrawMode = false;
                     }
 
                     // Later ADD Boolean that checks if panning and ONLY check camera clamp IF panning for optimization
@@ -197,11 +207,17 @@ class SDLApplication{
             // Clamps Camera
             camera.clamp();
 
+            // Sets cell to water
+            if(isPressed && waterDrawMode){
+                Water::spawn(world, camera.getCellX(posX), camera.getCellY(posY));
+            }
+
             // Sets a cell to sand if pressed there
-            if(isPressed){
+            else if (isPressed && !waterDrawMode){
                 Sand::spawn(world, camera.getCellX(posX), camera.getCellY(posY));
 
             }
+
         }
 
         void drawPixel(int x, int y){
@@ -236,6 +252,11 @@ class SDLApplication{
                     // If the cell is sand, go through this rendering process
                     if(Sand::isSand(world, i, j)){
                         SDL_Color c = Sand::color(world.getShade(i, j));
+                        SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
+                        drawPixel(i, j);
+                    }
+                    if(Water::isWater(world, i, j)){
+                        SDL_Color c = Water::color(world.getShade(i, j));
                         SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
                         drawPixel(i, j);
                     }

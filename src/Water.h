@@ -1,0 +1,82 @@
+#ifndef WATER_H
+#define WATER_H
+
+#include "SDL3/SDL_pixels.h"
+#include "World.h"
+#include <SDL3/SDL.h>
+
+//Water is 2
+namespace Water {
+
+    inline constexpr int BASE_R = 16;
+    inline constexpr int BASE_G = 45;
+    inline constexpr int BASE_B = 158;
+
+    // Create a grain with its own random shade (rolled ONCE, here)
+    inline void spawn(World& world, int x, int y){
+        world.setCell(x, y, 2);
+        world.setShade(x, y, SDL_rand(25) - 12);
+    }
+
+    // Turn a stored shade into the grain's color s
+    inline SDL_Color color(int shade){
+        return SDL_Color{ (Uint8)(0x16 + shade), (Uint8)(0x2D + shade),
+                          (Uint8)(0x9E + shade), 255 };
+    }
+
+    inline bool isWater(World& world, int x, int y){
+        if(world.getCell(x, y) == 2){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    inline void updateWaterCells(World& world, int x, int y){
+        if(world.getCellYDir(x, y, -1) == 0){
+            world.moveCell(x, y, x, y+1);
+        }
+
+        if(world.getCellXDir(x, y, 1) == 0 && world.getCellXDir(x, y, -1) == 0){
+            int r = SDL_rand(2);
+            if(r == 0){
+                world.moveCell(x, y, x+1, y);
+            }
+            else{
+                world.moveCell(x, y, x-1, y);
+
+            }
+        }
+
+        else if(world.getCellXDir(x,y,1) == 0){
+            world.moveCell(x, y, x-1, y);
+        }
+        else if(world.getCellXDir(x,y,-1) == 0){
+            world.moveCell(x, y, x+1, y);
+        }
+
+        else if (world.getCell(x+1, y+1) == 0 && world.getCell(x-1,y+1) == 0){
+            int r = SDL_rand(2);
+            if(r == 0){
+                world.moveCell(x, y, x+1, y+1);
+            }
+            else{
+                world.moveCell(x, y, x-1, y+1);
+
+            }
+        }
+        else if(world.getCell(x+1, y+1) == 0){
+            world.moveCell(x, y, x+1, y+1);
+        }
+        else if(world.getCell(x-1,y+1) == 0){
+            world.moveCell(x, y, x-1, y+1);
+        }
+        else{
+            world.setCell(x, y, 2);
+        }
+    }
+
+
+}
+#endif

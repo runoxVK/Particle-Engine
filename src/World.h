@@ -31,8 +31,8 @@ class World{
         int getCell(int x, int y) const {
                if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT) {
 
-                   // Returns 2, saying this cell is a barrier
-                   return 2;
+                   // Returns 100, saying this cell is a barrier
+                   return 100;
                }
 
                // Gets the value at cell (x,y)
@@ -43,12 +43,27 @@ class World{
         int getCellYDir(int x, int y, int dir) const {
             int realDir = -dir;
             if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT || y+realDir < 0|| y+realDir >= HEIGHT) {
-                // Returns 2, saying this cell is a barrier
-                return 2;
+                // Returns 100, saying this cell is a barrier
+                return 100;
             }
             else{
                 // Get Cell at (x, y+d)
                 return world[(y+realDir) * WIDTH + x];
+            }
+
+            return 0;
+        }
+
+        // Get Cell Direction above/Below
+        int getCellXDir(int x, int y, int dir) const {
+            int realDir = -dir;
+            if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT || x+realDir < 0|| x+realDir >= HEIGHT) {
+                // Returns 100, saying this cell is a barrier
+                return 100;
+            }
+            else{
+                // Get Cell at (x+d, y)
+                return world[y * WIDTH + (x+realDir)];
             }
 
             return 0;

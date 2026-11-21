@@ -3,6 +3,7 @@
 
 #include "GameVars.h"
 #include "SDLApplication.h"
+#include "Water.h"
 
 class GameManager{
 
@@ -18,6 +19,10 @@ class GameManager{
                 for (int x = 0; x < World::WIDTH; x++){
                     if (Sand::isSand(world, x, y)){
                         Sand::updateSandCells(world, x, y);
+
+                    }
+                    else if(Water::isWater(world, x, y)){
+                        Water::updateWaterCells(world, x, y);
                     }
                 }
             }

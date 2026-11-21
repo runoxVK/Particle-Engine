@@ -107,7 +107,8 @@ class SDLApplication{
             //SDL_PollEvent(&event) returns 1 if any event is taking place
             // Event Handling Loop:
             while(SDL_PollEvent(&event)){
-
+                //Convert the coordinates in an event to render coordinates.
+                SDL_ConvertEventToRenderCoordinates(renderer, &event);
                 //Quit
                 if(event.type == SDL_EVENT_QUIT){
                     isRunning = false;
@@ -142,14 +143,15 @@ class SDLApplication{
                 else if (event.type == SDL_EVENT_MOUSE_MOTION){
                     // There is also event.motion.xrel, event.motion.yrel
                     SDL_Log("x,y: %f, %f",event.motion.x, event.motion.y);
+                    posX = int(event.motion.x);
+                    posY = int(event.motion.y);
+
                 }
 
                 // Mouse Click
                 else if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN){
                     SDL_Log("Mouse Pressed");
                     isPressed = true;
-                    posX = int(event.motion.x);
-                    posY = int(event.motion.y);
 
                 }
 
@@ -191,6 +193,15 @@ class SDLApplication{
                 world.setCell(camera.getCellX(posX), camera.getCellY(posY), 1);
 
             }
+
+            // Sand physics: bottom row up, so each grain moves once per frame
+            for (int y = World::HEIGHT - 1; y >= 0; y--){
+                for (int x = 0; x < World::WIDTH; x++){
+                    if (world.isSand(x, y)){
+                        world.updateSandCells(x, y);
+                    }
+                }
+            }
         }
 
         void drawPixel(int x, int y){
@@ -199,9 +210,6 @@ class SDLApplication{
             int dx = camera.getPixelX(x);
             int dy = camera.getPixelY(y);
 
-
-            //Sets draw color for drawing lines etc.
-            SDL_SetRenderDrawColor(renderer, 0x5C, 0x40, 0x33, 0xFF);
 
             //Initialize rectangle to be drawn
             SDL_FRect rect;
@@ -221,8 +229,12 @@ class SDLApplication{
             SDL_SetRenderDrawColor(renderer, 0xFF, 0xFD, 0xD0, 0xFF);
             SDL_RenderClear(renderer);
 
-            for(int i=0; i<world.WIDTH; i++){
-                for(int j=0; j<world.HEIGHT; j++){
+
+            //Sets draw color for drawing lines etc.
+            SDL_SetRenderDrawColor(renderer, 0x5C, 0x40, 0x33, 0xFF);
+
+            for(int j=0; j<world.HEIGHT; j++){       // y outside
+                for(int i=0; i<world.WIDTH; i++){    // x inside
                     if(world.getCell(i, j) == 1){
                         drawPixel(i, j);
                     }

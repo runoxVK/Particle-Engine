@@ -26,6 +26,7 @@ class World{
            int getCell(int x, int y) const {
                if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT) {
                    std::cout << "Coordinates out of bounds";
+                   return 0;
                }
 
                // Gets the value at cell (x,y)
@@ -36,6 +37,7 @@ class World{
            void setCell(int x, int y, int value) {
                if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT) {
                    std::cout << "Coordinates out of bounds";
+                   return;
                }
 
                // Sets cell (x,y) to your value

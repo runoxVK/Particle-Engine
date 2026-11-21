@@ -36,7 +36,7 @@ class World{
                return world[y * WIDTH + x];
            }
 
-        // Get Cell Below
+        // Get Cell Direction above/Below
         int getCellYDir(int x, int y, int dir) const {
             int realDir = -dir;
 
@@ -64,44 +64,6 @@ class World{
                world[y * WIDTH + x] = value;
            }
 
-        bool isSand(int x, int y){
-            if(getCell(x, y) == 1){
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-
-        void updateSandCells(int x, int y){
-            if(getCellYDir(x, y, -1) == 0){
-                setCell(x, y, 0);
-                setCell(x, y+1, 1);
-            }
-            else if (getCell(x+1, y+1) == 0 && getCell(x-1,y+1) == 0){
-                int r = SDL_rand(2);
-                if(r == 0){
-                    setCell(x, y, 0);
-                    setCell(x+1, y+1, 1);
-                }
-                else{
-                    setCell(x, y, 0);
-                    setCell(x-1, y+1, 1);
-
-                }
-            }
-            else if(getCell(x+1, y+1) == 0){
-                setCell(x, y, 0);
-                setCell(x+1, y+1, 1);
-            }
-            else if(getCell(x-1,y+1) == 0){
-                setCell(x, y, 0);
-                setCell(x-1, y+1, 1);
-            }
-            else{
-                setCell(x, y, 1);
-            }
-        }
 
 };
 

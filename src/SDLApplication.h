@@ -22,6 +22,7 @@
 #include "GameVars.h"
 #include "World.h"
 #include "Camera.h"
+#include "Sand.h"
 
 
 
@@ -36,7 +37,9 @@ class SDLApplication{
         SDL_Renderer* renderer; //Connection to the GPU -> Draws via the CPU -> Acts as an abstraction to OpenGL
         SDL_Texture* texture; // The texture is the image in GPU memory that gets drawn: https://www.youtube.com/watch?v=r8T-SPCz4JM&list=PLvv0ScY6vfd-RZSmGbLkZvkgec6lJ0BfX&index=23
 
-        World world;
+        //A reference to the world
+        World& world;
+
         Camera camera;
 
         // Mouse Position x and y
@@ -44,8 +47,9 @@ class SDLApplication{
         int posY = 0;
         bool isPressed = false;
 
-        // Constructor
-        SDLApplication(){
+        // Constructor --> world = gameWorld via initializer
+        // Initializer grabs our world reference and births a world such that it equals that address
+        SDLApplication(World& gameWorld) : world(gameWorld){
             // Initializing a system (SDL_INIT_AUDIO later too)
             if(!SDL_Init(SDL_INIT_VIDEO)){
                 SDL_Log("Failed!");
@@ -98,6 +102,7 @@ class SDLApplication{
             // Initializing event variable
             SDL_Event event;
 
+            // Keeps track of keys
             const bool* keys = SDL_GetKeyboardState(nullptr);
             // SDL_WarpMouseInWindow(SDL_Window *window, float x, float y) --> forces Mouse position into a certain place
 
@@ -109,6 +114,7 @@ class SDLApplication{
             while(SDL_PollEvent(&event)){
                 //Convert the coordinates in an event to render coordinates.
                 SDL_ConvertEventToRenderCoordinates(renderer, &event);
+
                 //Quit
                 if(event.type == SDL_EVENT_QUIT){
                     isRunning = false;
@@ -123,7 +129,7 @@ class SDLApplication{
                         SDL_Log("L Key pressed");
                     }
 
-                    // Boolean that checks if panning and ONLY check camera clamp IF panning for optimization
+                    // Later ADD Boolean that checks if panning and ONLY check camera clamp IF panning for optimization
                     if (keys[SDL_SCANCODE_W]){
                         camera.camY -= panSpeed;  // up
                     }
@@ -155,6 +161,7 @@ class SDLApplication{
 
                 }
 
+                // Mouse Released
                 else if (event.type == SDL_EVENT_MOUSE_BUTTON_UP){
                     isPressed = false;
                 }
@@ -187,20 +194,14 @@ class SDLApplication{
         }
 
         void Update(){
+            // Clamps Camera
             camera.clamp();
+
+            // Sets a cell to sand if pressed there
             if(isPressed){
                 // Cells are passed through the camera transform first
                 world.setCell(camera.getCellX(posX), camera.getCellY(posY), 1);
 
-            }
-
-            // Sand physics: bottom row up, so each grain moves once per frame
-            for (int y = World::HEIGHT - 1; y >= 0; y--){
-                for (int x = 0; x < World::WIDTH; x++){
-                    if (world.isSand(x, y)){
-                        world.updateSandCells(x, y);
-                    }
-                }
             }
         }
 
@@ -233,9 +234,10 @@ class SDLApplication{
             //Sets draw color for drawing lines etc.
             SDL_SetRenderDrawColor(renderer, 0x5C, 0x40, 0x33, 0xFF);
 
+            // Iterates through cells to draw pixels where needed
             for(int j=0; j<world.HEIGHT; j++){       // y outside
                 for(int i=0; i<world.WIDTH; i++){    // x inside
-                    if(world.getCell(i, j) == 1){
+                    if(Sand::isSand(world, i, j)){
                         drawPixel(i, j);
                     }
                 }

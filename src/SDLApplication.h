@@ -204,6 +204,7 @@ class SDLApplication{
         }
 
         void Update(){
+
             // Clamps Camera
             camera.clamp();
 

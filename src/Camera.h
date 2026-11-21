@@ -7,8 +7,8 @@
 class Camera{
     public:
         int camX = 0;
-        int camY = 0;
-        int zoom = 4;
+        int camY = 900;
+        int zoom = 8;
 
         static constexpr int SCREEN_W = 1028;   // matches your logical presentation size
         static constexpr int SCREEN_H = 1028;

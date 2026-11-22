@@ -37,6 +37,12 @@ namespace Sand {
             world.moveCell(x, y, x, y+1);
         }
 
+        // Check if water is beneath the sand
+        if(world.getCellYDir(x, y, -1) == 2){
+            world.moveCell(x, y, x, y+1);
+            world.setCell(x, y, 2);
+        }
+
         else if (world.getCell(x+1, y+1) == 0 && world.getCell(x-1,y+1) == 0){
             int r = SDL_rand(2);
             if(r == 0){

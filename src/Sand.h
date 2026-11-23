@@ -38,9 +38,25 @@ namespace Sand {
         }
 
         // Check if water is beneath the sand
-        if(world.getCellYDir(x, y, -1) == 2){
-            world.moveCell(x, y, x, y+1);
-            world.setCell(x, y, 2);
+        else if(world.getCellYDir(x, y, -1) == 2){
+            world.swapCell(x, y, x, y+1);
+        }
+
+        else if (world.getCell(x+1, y+1) == 2 && world.getCell(x-1,y+1) == 2){
+            int r = SDL_rand(2);
+            if(r == 0){
+                world.swapCell(x, y, x+1, y+1);
+            }
+            else{
+                world.swapCell(x, y, x-1, y+1);
+            }
+        }
+
+        else if(world.getCell(x+1, y+1) == 2){
+            world.swapCell(x, y, x+1, y+1);
+        }
+        else if(world.getCell(x-1,y+1) == 2){
+            world.swapCell(x, y, x-1, y+1);
         }
 
         else if (world.getCell(x+1, y+1) == 0 && world.getCell(x-1,y+1) == 0){
@@ -50,7 +66,6 @@ namespace Sand {
             }
             else{
                 world.moveCell(x, y, x-1, y+1);
-
             }
         }
         else if(world.getCell(x+1, y+1) == 0){

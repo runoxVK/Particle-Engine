@@ -109,6 +109,18 @@ class World{
             setShade(toX, toY, getShade(fromX, fromY));
             setCell(fromX, fromY, 0);
         }
+
+        // Swap two cells completely (material and shade)
+        void swapCell(int ax, int ay, int bx, int by){
+            int cellA  = getCell(ax, ay);
+            int shadeA = getShade(ax, ay);
+
+            setCell(ax, ay, getCell(bx, by));
+            setShade(ax, ay, getShade(bx, by));
+
+            setCell(bx, by, cellA);
+            setShade(bx, by, shadeA);
+        }
 };
 
 
